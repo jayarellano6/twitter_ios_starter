@@ -81,10 +81,10 @@ class HomeTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCell
         let user = tweetArray[indexPath.row]["user"] as! NSDictionary
         
-        cell.userNameLabel.text = user["name"] as! String
+        cell.userNameLabel.text = user["name"] as? String
         cell.atNameLabel.text = "@"
         cell.atNameLabel.text?.append(contentsOf: user["screen_name"] as! String)
-        cell.tweetLabel.text = tweetArray[indexPath.row]["text"] as! String
+        cell.tweetLabel.text = tweetArray[indexPath.row]["text"] as? String
         
         let imgUrl = URL(string: (user["profile_image_url"] as? String)!)
         let data = try? Data(contentsOf: imgUrl!)

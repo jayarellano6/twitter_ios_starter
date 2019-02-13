@@ -82,9 +82,9 @@
 				6EBCF54321E047A500451C03 /* TwitterAPICaller.swift */,
 				73DCFA8F22123FBB0045FB38 /* loginViewController.swift */,
 				73DCFA91221397480045FB38 /* HomeTableViewController.swift */,
+				73DCFA932213A9510045FB38 /* TweetCell.swift */,
 				6EBCF53121DF07FE00451C03 /* Info.plist */,
 				37D29B8521F90E3400984A88 /* Assets.xcassets */,
-				73DCFA932213A9510045FB38 /* TweetCell.swift */,
 			);
 			path = Twitter;
 			sourceTree = "<group>";
