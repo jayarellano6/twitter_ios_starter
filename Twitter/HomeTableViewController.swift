@@ -23,19 +23,24 @@ class HomeTableViewController: UITableViewController {
         tableView.refreshControl = myRefreshControl
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadTweets()
+    }
+    
     @objc func loadTweets(){
         
         numberOfTweets = 35
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let myParams = ["count": numberOfTweets]
         
-        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams, success: { (tweets: [NSDictionary]) in
+        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams as [String : Any], success: { (tweets: [NSDictionary]) in
             
             self.tweetArray.removeAll()
             for tweet in tweets{
                 self.tweetArray.append(tweet)
             }
-            
+            print(self.tweetArray)
             self.tableView.reloadData()
             self.myRefreshControl.endRefreshing()
             
@@ -79,6 +84,7 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCell
+        
         let user = tweetArray[indexPath.row]["user"] as! NSDictionary
         
         cell.userNameLabel.text = user["name"] as? String
@@ -88,13 +94,27 @@ class HomeTableViewController: UITableViewController {
         
         let imgUrl = URL(string: (user["profile_image_url"] as? String)!)
         let data = try? Data(contentsOf: imgUrl!)
-        
         if let imageData = data {
             cell.profileImageView.image = UIImage(data: imageData)
         }
         
+        cell.setFavorited(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        
+        //extras
+        let retweetString = String(tweetArray[indexPath.row]["retweet_count"] as! Int)
+        cell.retweetCount.text = retweetString
+        
+        //
+        let likeString = String(tweetArray[indexPath.row]["favorite_count"] as! Int)
+        cell.likeCount.text = likeString
+        
+        //
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2
         cell.profileImageView.clipsToBounds = true
+        
+        
         return cell
     }
     
